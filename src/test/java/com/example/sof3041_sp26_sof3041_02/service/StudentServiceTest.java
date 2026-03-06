@@ -90,16 +90,19 @@ void addStudentWithInvalidAge(){
 
 
       // 3. invalid age
-    @Test
-    void updateStudentWithInvalidAge() {
-        Student student = new Student(1L, 20, "John Doe", 8.5);
-        studentService.addStudent(student);
+// ✅ Sửa lại
+@Test
+void updateStudentWithInvalidAge() {
+    Student student = new Student( 1L,  20,  "John Doe",  8.5);
+    studentService.addStudent(student);
 
-        student.setAge(10);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> studentService.updaeStudent(student));
-        assertEquals("Age must be at least 18", exception.getMessage());
-    }
+    // Bỏ dòng student.setAge(10) ở đây!
+Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+    student.setAge(10); // setAge nằm TRONG lambda → exception bị bắt đúng chỗ
+    studentService.updaeStudent(student); // chỉ truyền student thôi
+});
+assertEquals("Age must be at least 18", exception.getMessage());
+}
 
      // 4. invalid mark
     @Test
